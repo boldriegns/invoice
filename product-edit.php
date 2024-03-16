@@ -1,8 +1,14 @@
 <?php
-
-
 include('header.php');
 include('functions.php');
+
+if (isset($_SESSION['success'])) {
+    echo "<p>" . $_SESSION['success'] . "</p>";
+    unset($_SESSION['success']); // Remove the success message after displaying it
+} elseif (isset($_SESSION['error'])) {
+    echo "<p>" . $_SESSION['error'] . "</p>";
+    unset($_SESSION['error']); // Remove the error message after displaying it
+}
 
 $getID = $_GET['id'];
 
@@ -25,6 +31,7 @@ if($result) {
 		$product_name = $row['product_name']; // product name
 		$product_desc = $row['product_desc']; // product description
 		$product_price = $row['product_price']; // product price
+		$image = $row['photo']; // product image
 	}
 }
 
@@ -35,11 +42,6 @@ $mysqli->close();
 
 <h1>Edit Product</h1>
 <hr>
-
-<div id="response" class="alert alert-success" style="display:none;">
-	<a href="#" class="close" data-dismiss="alert">&times;</a>
-	<div class="message"></div>
-</div>
 						
 <div class="row">
 	<div class="col-xs-12">
@@ -48,7 +50,7 @@ $mysqli->close();
 				<h4>Editing Product (<?php echo $getID; ?>)</h4>
 			</div>
 			<div class="panel-body form-group form-group-sm">
-				<form method="post" id="update_product">
+				<form action="action1.php" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="action" value="update_product">
 					<input type="hidden" name="id" value="<?php echo $getID; ?>">
 					<div class="row">
@@ -56,8 +58,11 @@ $mysqli->close();
 							<input type="text" class="form-control required" name="product_name" placeholder="Enter product name" value="<?php echo $product_name; ?>">
 						</div>
 						<div class="col-xs-4">
-							<input type="text" class="form-control required" name="product_desc" placeholder="Enter product description" value="<?php echo $product_desc; ?>">
+						<input type="file" class="form-control required" name="image" placeholder="insert photo" value="<?php echo $image; ?>">
 						</div>
+						<div class="col-xs-4">
+							<input type="text" class="form-control required" name="product_desc" placeholder="Enter product description" value="<?php echo $product_desc; ?>">
+						</div><br><br>
 						<div class="col-xs-4">
 							<div class="input-group">
 								<span class="input-group-addon"><?php echo CURRENCY ?></span>
@@ -67,7 +72,7 @@ $mysqli->close();
 					</div>
 					<div class="row">
 						<div class="col-xs-12 margin-top btn-group">
-							<input type="submit" id="action_update_product" class="btn btn-success float-right" value="Update product" data-loading-text="Updating...">
+							<input type="submit" id="action_update_product" name="edit_product" class="btn btn-success float-right" value="Update product" data-loading-text="Updating...">
 						</div>
 					</div>
 				</form>

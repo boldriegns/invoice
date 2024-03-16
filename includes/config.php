@@ -39,7 +39,7 @@ define('DATE_FORMAT', 'YYYY/MM/DD'); // DD/MM/YYYY or MM/DD/YYYY
 define('CURRENCY', 'ksh.'); // Currency symbol
 define('ENABLE_VAT', true); // Enable TAX/VAT
 define('VAT_INCLUDED', false); // Is VAT included or excluded?
-define('VAT_RATE', '10'); // This is the percentage value
+define('VAT_RATE', '5'); // This is the percentage value
 
 define('PAYMENT_DETAILS', 'Invoice Mg System'); // Payment information
 define('FOOTER_NOTE', 'Invoice Management System');

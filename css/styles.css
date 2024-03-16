@@ -8,6 +8,7 @@
 body {
   padding: 0;
   background-color: #00a65a;
+  
 }
 
 .btn-primary {
@@ -51,6 +52,8 @@ body {
 
 .panel-body {
   padding: 30px 30px 15px 30px;
+   background-image: url('images/login.jpg');
+  
 }
 
 .panel-heading {

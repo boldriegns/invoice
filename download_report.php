@@ -46,46 +46,69 @@ if(isset($_POST['start_date'], $_POST['end_date'], $_POST['status'])) {
     } else {
         if (mysqli_num_rows($result) > 0) {
             require('vendor/setasign/fpdf/fpdf.php');
+
+            class PDF extends FPDF {
+                // Header
+                function Header() {
+                    // Logo
+                    $this->Image('images/logo.png',55,8,100); // Adjust position and size of the logo
+                    // Arial bold 15
+                    $this->SetFont('Arial','B',15);
+                    // Move to the right
+                    $this->Cell(80);
+                    
+                    $this->Ln(20);
+        
+                }
+            }
+            
             // Create a new PDF instance
-            $pdf = new FPDF();
+            $pdf = new PDF();
             $pdf->AddPage();
-
+            
             // Set font and size
-            $pdf->SetFont('Arial', '', 12);
-
+            $pdf->SetFont('Arial', '', 16);
+            
             // Output start and end date
-            $pdf->Cell(0, 10, "Report for $start to $end", 0, 1, 'C');
+            $pdf->Cell(0, 10, "Report from $start to $end", 0, 1, 'C');
 
-            // Output the table header
-            $pdf->Cell(10, 10, 'ID', 1, 0, 'C');
+            $pdf->SetFont('Arial', '', 14);
+            
+            $start_date = isset($_POST['start_date']) ? date('jS F, Y', strtotime($_POST['start_date'])) : '';
+            $pdf->Cell(85, 10, 'Generated on ' . $start_date, 1, 0, 'C');
+            
+            // Retrieve and output status
+            $status = isset($_POST['status']) ? $_POST['status'] : '';
+            $pdf->Cell(105, 10, 'Invoice Status: ' . $status, 1, 1, 'C');
+            $pdf->SetFont('Arial', '', 10);
+            $pdf->Cell(15, 10, 'ID', 1, 0, 'C');
             $pdf->Cell(30, 10, 'Vendor', 1, 0, 'C');
-            $pdf->Cell(30, 10, 'Customer', 1, 0, 'C');
-            $pdf->Cell(30, 10, 'Product Name', 1, 0, 'C');
-            $pdf->Cell(30, 10, 'Invoice Date', 1, 0, 'C');
-            $pdf->Cell(20, 10, 'Price', 1, 0, 'C');
-            $pdf->Cell(20, 10, 'Quantity', 1, 0, 'C');
+            $pdf->Cell(40, 10, 'Customer', 1, 0, 'C');
+            $pdf->Cell(40, 10, 'Product Name', 1, 0, 'C');
+            $pdf->Cell(30, 10, 'Price', 1, 0, 'C');
+            $pdf->Cell(15, 10, 'Quantity', 1, 0, 'C');
             $pdf->Cell(20, 10, 'Amount', 1, 1, 'C'); // Move to the next line after the last column
-
+            
             // Loop through result set and output data to PDF
             while ($row = mysqli_fetch_assoc($result)) {
-                $pdf->Cell(10, 10, $row['invoice'], 1, 0, 'C');
+                $pdf->Cell(15, 10, $row['invoice'], 1, 0, 'C');
                 $pdf->Cell(30, 10, $row['product_vendor'], 1, 0, 'C');
-                $pdf->Cell(30, 10, $row['customer_name'], 1, 0, 'C');
-                $pdf->Cell(30, 10, $row['product_name'], 1, 0, 'C');
-                $pdf->Cell(30, 10, $row['invoice_date'], 1, 0, 'C');
-                $pdf->Cell(20, 10, $row['product_price'], 1, 0, 'C');
-                $pdf->Cell(20, 10, $row['quantity'], 1, 0, 'C');
+                $pdf->Cell(40, 10, $row['customer_name'], 1, 0, 'C');
+                $pdf->Cell(40, 10, $row['product_name'], 1, 0, 'C');
+                $pdf->Cell(30, 10, $row['product_price'], 1, 0, 'C');
+                $pdf->Cell(15, 10, $row['quantity'], 1, 0, 'C');
                 $pdf->Cell(20, 10, $row['total'], 1, 1, 'C'); // Move to the next line after the last column
             }
-
+            
             // Generate a unique filename for the PDF report
             $filename = 'invoices/report_' . date('YmdHis') . '.pdf';
-
+            
             // Save the PDF to the specified filename
             $pdf->Output($filename, 'F');
-
+            
             // Display success message with link to download the PDF
-           echo "Report generated successfully! <a href='$filename' target='_blank'>Download PDF</a>";
+            echo "Report generated successfully! <a href='$filename' target='_blank'>Download PDF</a>";
+            
 
         } else {
             echo "No invoices found for the specified date range.";

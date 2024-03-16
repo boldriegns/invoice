@@ -74,7 +74,15 @@
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="images/admin.jpg" class="user-image" alt="User Image">
+              <?php if($_SESSION['user_role'] == 'customer'): ?>
+              <img src="images/user.jpg" class="user-image" alt="User Image">
+              <?php endif; ?>
+              <?php if($_SESSION['user_role'] == 'vendor'): ?>
+              <img src="images/vendor.jpg" class="user-image" alt="User Image">
+              <?php endif; ?>
+              <?php if($_SESSION['user_role'] == 'admin'): ?>
+              <img src="images/admin1.jpg" class="user-image" alt="User Image">
+              <?php endif; ?>
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs"><?php echo $_SESSION['login_username'];?></span>
             </a>

@@ -51,37 +51,37 @@ function getInvoices() {
     if($results) {
         // Display table headers
         print '<table class="table table-striped table-hover table-bordered" id="data-table" cellspacing="0"><thead><tr>
-                <th>Invoice</th>
-                <th>Vendor Name</th>
-                <th>Customer</th>
-                <th>Issue Date</th>
-                <th>Due Date</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th style="border: 1px solid brown;">Invoice</th>
+                <th style="border: 1px solid brown;">Vendor Name</th>
+                <th style="border: 1px solid brown;">Customer</th>
+                <th style="border: 1px solid brown;">Issue Date</th>
+                <th style="border: 1px solid brown;">Due Date</th>
+                <th style="border: 1px solid brown;">Type</th>
+                <th style="border: 1px solid brown;">Status</th>
+                <th style="border: 1px solid brown;">Actions</th>
               </tr></thead><tbody>';
 
         while($row = $results->fetch_assoc()) {
             // Display invoice details
             print '<tr>
-                <td>'.$row["invoice"].'</td>
-                <td>'.$row["product_vendor"].'</td>
-                <td>'.$row["name"].'</td>
-                <td>'.$row["invoice_date"].'</td>
-                <td>'.$row["invoice_due_date"].'</td>
-                <td>'.$row["invoice_type"].'</td>';
+                <td style="border: 1px solid purple;">'.$row["invoice"].'</td>
+                <td style="border: 1px solid purple;">'.$row["product_vendor"].'</td>
+                <td style="border: 1px solid purple;">'.$row["name"].'</td>
+                <td style="border: 1px solid purple;">'.$row["invoice_date"].'</td>
+                <td style="border: 1px solid purple;">'.$row["invoice_due_date"].'</td>
+                <td style="border: 1px solid purple;">'.$row["invoice_type"].'</td>';
 
             if($row['status'] == "open") {
-                print '<td><span class="label label-primary">'.$row['status'].'</span></td>';
+                print '<td style="border: 1px solid purple;"><span class="label label-primary">'.$row['status'].'</span></td>';
             } elseif ($row['status'] == "paid") {
-                print '<td><span class="label label-success">'.$row['status'].'</span></td>';
+                print '<td style="border: 1px solid purple;"><span class="label label-success">'.$row['status'].'</span></td>';
             }
 
             // Check user role for actions
             if(isset($_SESSION['user_role']) && ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'vendor')) {
-                print '<td><a href="invoice-edit.php?id='.$row["invoice"].'" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> <a href="#" data-invoice-id="'.$row['invoice'].'" data-email="'.$row['email'].'" data-invoice-type="'.$row['invoice_type'].'"  class="btn btn-success btn-xs email-invoice"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a> <a href="invoices/'.$row["invoice"].'.pdf" class="btn btn-info btn-xs" target="_blank"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a> <a data-invoice-id="'.$row['invoice'].'" class="btn btn-danger btn-xs delete-invoice"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>';
+                print '<td style="border: 1px solid purple;"><a href="invoice-edit.php?id='.$row["invoice"].'" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> <a href="#" data-invoice-id="'.$row['invoice'].'" data-email="'.$row['email'].'" data-invoice-type="'.$row['invoice_type'].'"  class="btn btn-success btn-xs email-invoice"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a> <a href="invoices/'.$row["invoice"].'.pdf" class="btn btn-info btn-xs" target="_blank"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a> <a data-invoice-id="'.$row['invoice'].'" class="btn btn-danger btn-xs delete-invoice"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>';
             } else {
-                print '<td><a href="invoices/'.$row["invoice"].'.pdf" class="btn btn-info btn-xs" target="_blank"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a></td>';
+                print '<td style="border: 1px solid purple;"><a href="invoices/'.$row["invoice"].'.pdf" class="btn btn-info btn-xs" target="_blank"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a></td>';
             }
             print '</tr>';
         }
@@ -198,10 +198,10 @@ function popUserList() {
 
 		print '<table class="table table-striped table-hover table-bordered" id="data-table"><thead><tr>
 
-				<th>username</th>
-				<th>Email</th>
-				<th>Phone</th>
-				<th>Action</th>
+				<th style="border: 1px solid brown;">username</th>
+				<th style="border: 1px solid brown;">Email</th>
+				<th style="border: 1px solid brown;">Phone</th>
+				<th style="border: 1px solid brown;">Action</th>
 
 			  </tr></thead><tbody>';
 
@@ -209,10 +209,10 @@ function popUserList() {
 
 		    print '
 			    <tr>
-					<td>'.$row["username"].'</td>
-				    <td>'.$row["email"].'</td>
-				    <td>'.$row["phone"].'</td>
-					<td><a href="#" class="btn btn-primary btn-xs customer-select" data-customer-name="'.$row['username'].'" data-customer-email="'.$row['email'].'" data-customer-phone="'.$row['phone'].'" data-customer-town="'.$row['town'].'" data-customer-county="'.$row['county'].'" data-customer-address-1="'.$row['address_1'].'" data-customer-name-ship="'.$row['username'].'" data-customer-address-1-ship="'.$row['address_1'].'"  data-customer-town-ship="'.$row['town'].'" data-customer-county-ship="'.$row['county'].'">Select</a></td>
+					<td style="border: 1px solid purple;">'.$row["username"].'</td>
+				    <td style="border: 1px solid purple;">'.$row["email"].'</td>
+				    <td style="border: 1px solid purple;">'.$row["phone"].'</td>
+					<td style="border: 1px solid purple;"><a href="#" class="btn btn-primary btn-xs customer-select" data-customer-name="'.$row['username'].'" data-customer-email="'.$row['email'].'" data-customer-phone="'.$row['phone'].'" data-customer-town="'.$row['town'].'" data-customer-county="'.$row['county'].'" data-customer-address-1="'.$row['address_1'].'" data-customer-name-ship="'.$row['username'].'" data-customer-address-1-ship="'.$row['address_1'].'"  data-customer-town-ship="'.$row['town'].'" data-customer-county-ship="'.$row['county'].'">Select</a></td>
 			    </tr>
 		    ';
 		}
@@ -254,10 +254,10 @@ function popCustomersList() {
 
 		print '<table class="table table-striped table-hover table-bordered" id="data-table"><thead><tr>
 
-				<th>Name</th>
-				<th>Email</th>
-				<th>Phone</th>
-				<th>Action</th>
+				<th style="border: 1px solid brown;">Name</th>
+				<th style="border: 1px solid brown;">Email</th>
+				<th style="border: 1px solid brown;">Phone</th>
+				<th style="border: 1px solid brown;">Action</th>
 
 			  </tr></thead><tbody>';
 
@@ -265,10 +265,10 @@ function popCustomersList() {
 
 		    print '
 			    <tr>
-					<td>'.$row["name"].'</td>
-				    <td>'.$row["email"].'</td>
-				    <td>'.$row["phone"].'</td>
-					<td><a href="#" class="btn btn-primary btn-xs customer-select" data-customer-name="'.$row['name'].'" data-customer-email="'.$row['email'].'" data-customer-phone="'.$row['phone'].'" data-customer-address-1="'.$row['address_1'].'" data-customer-town="'.$row['town'].'" data-customer-county="'.$row['county'].'" data-customer-name-ship="'.$row['name_ship'].'" data-customer-address-1-ship="'.$row['address_1_ship'].'"  data-customer-town-ship="'.$row['town_ship'].'" data-customer-county-ship="'.$row['county_ship'].'">Select</a></td>
+					<td style="border: 1px solid purple;">'.$row["name"].'</td>
+				    <td style="border: 1px solid purple;">'.$row["email"].'</td>
+				    <td style="border: 1px solid purple;">'.$row["phone"].'</td>
+					<td style="border: 1px solid purple;"><a href="#" class="btn btn-primary btn-xs customer-select" data-customer-name="'.$row['name'].'" data-customer-email="'.$row['email'].'" data-customer-phone="'.$row['phone'].'" data-customer-address-1="'.$row['address_1'].'" data-customer-town="'.$row['town'].'" data-customer-county="'.$row['county'].'" data-customer-name-ship="'.$row['name_ship'].'" data-customer-address-1-ship="'.$row['address_1_ship'].'"  data-customer-town-ship="'.$row['town_ship'].'" data-customer-county-ship="'.$row['county_ship'].'">Select</a></td>
 			    </tr>
 		    ';
 		}
@@ -341,12 +341,12 @@ function getOrders() {
     if($results) {
         // Display table headers
         print '<table class="table table-striped table-hover table-bordered" id="data-table"><thead><tr>
-                <th>Customer Name</th>
-                <th>Product Name</th>
-                <th>status</th>
-                <th>Product Price</th>
-                <th>Quantity</th>
-                <th>Action</th> <!-- Add a new column for actions -->
+                <th style="border: 1px solid brown;">Customer Name</th>
+                <th style="border: 1px solid brown;">Product Name</th>
+                <th style="border: 1px solid brown;">status</th>
+                <th style="border: 1px solid brown;">Product Price</th>
+                <th style="border: 1px solid brown;">Quantity</th>
+                <th style="border: 1px solid brown;">Action</th> <!-- Add a new column for actions -->
               </tr></thead><tbody>';
 
         while($row = $results->fetch_assoc()) {
@@ -363,11 +363,11 @@ function getOrders() {
                         $customer_county_ship = $row['county'];
             // Display order details
             print '<tr>
-                <td>'.$row["customer_name"].'</td>
-                <td>'.$row["product_name"].'</td>
-                <td>'.$row["status"].'</td>
-                <td>ksh. '.$row["product_price"].'</td>
-                <td>'.$row["quantity"].'</td>';
+                <td style="border: 1px solid purple;">'.$row["customer_name"].'</td>
+                <td style="border: 1px solid purple;">'.$row["product_name"].'</td>
+                <td style="border: 1px solid purple;">'.$row["status"].'</td>
+                <td style="border: 1px solid purple;">ksh. '.$row["product_price"].'</td>
+                <td style="border: 1px solid purple;">'.$row["quantity"].'</td>';
                 
 // Check if user is admin or vendor
 if (isset($_SESSION['user_role']) && ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'vendor')) {
@@ -400,7 +400,7 @@ if (isset($_SESSION['user_role']) && ($_SESSION['user_role'] == 'admin' || $_SES
         </td>';
     } else {
         // Display a message indicating that the order cannot be invoiced
-        print '<td><a data-product_id="'.$row['product_id'].'" class="btn btn-danger btn-xs delete-order"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Delete Order</a></td>';
+        print '<td style="border: 1px solid purple;"><a data-product_id="'.$row['product_id'].'" class="btn btn-danger btn-xs delete-order"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Delete Order</a></td>';
     }
 } else {
     // Otherwise, display delete button only
@@ -469,29 +469,38 @@ function getProducts() {
 
         print '<table class="table table-striped table-hover table-bordered" id="data-table"><thead><tr>
 
-                <th>Product</th>
-                <th>Product vendor</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Action</th>
+                <th style="border: 1px solid brown;">Product</th>
+                <th style="border: 1px solid brown;">Product vendor</th>
+                <th style="border: 1px solid brown;">product photo</th>
+                <th style="border: 1px solid brown;">Price</th>
+                <th style="border: 1px solid brown;">Action</th>
 
               </tr></thead><tbody>';
 
         while($row = $results->fetch_assoc()) {
-
+            $photo_path = $row["photo"];
             print '<tr>
-                    <td>'.$row["product_name"].'</td>
-                    <td>'.$row["product_vendor"].'</td>
-                    <td>'.$row["product_desc"].'</td>
-                    <td>ksh. '.$row["product_price"].'</td>';
+                    <td style="border: 1px solid purple;">'.$row["product_name"].'</td>
+                    <td style="border: 1px solid purple;">'.$row["product_vendor"].'</td>
+                    <td style="width: 250px; height: 20px; border: 1px solid purple;">
+                    <div class="product-info" style="display: flex;">
+                    <div class="product-photo" style="flex: 0 0 100px; margin-right: 10px;">
+                        <img src="'.$row["photo"].'" alt="Product Photo" style="max-width: 100px; max-height: 100px; width: 100%; height: auto;">
+                    </div>
+                    <div class="product-description" style="flex: 1;">
+                        <p>'.$row["product_desc"].'</p>
+                    </div>
+                </div>
+                
+                    <td style="border: 1px solid purple;">ksh. '.$row["product_price"].'</td>';
 
             // Check if user is admin or vendor
             if(isset($_SESSION['user_role']) && ($_SESSION['user_role'] == 'admin' || $_SESSION['user_role'] == 'vendor')) {
                 // Display edit and delete buttons
-                print '<td><a href="product-edit.php?id='.$row["product_id"].'" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> <a data-product-id="'.$row['product_id'].'" class="btn btn-danger btn-xs delete-product"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>';
+                print '<td style="border: 1px solid purple;"><a href="product-edit.php?id='.$row["product_id"].'" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> <a data-product-id="'.$row['product_id'].'" class="btn btn-danger btn-xs delete-product"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>';
             } else {
                 // Otherwise, display empty cell
-                print '<td>
+                print '<td style="border: 1px solid purple;">
 				<a href="orders.php?id='.$row["product_id"].'" class="btn btn-success btn-xs" title="Make Orders"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
                </td>';
 
@@ -538,10 +547,10 @@ function getUsers() {
 
 		print '<table class="table table-striped table-hover table-bordered" id="data-table"><thead><tr>
 
-				<th>Username</th>
-				<th>Email</th>
-				<th>Phone</th>
-				<th>Action</th>
+				<th style="border: 1px solid brown;">Username</th>
+				<th style="border: 1px solid brown;">Email</th>
+				<th style="border: 1px solid brown;">Phone</th>
+				<th style="border: 1px solid brown;">Action</th>
 
 			  </tr></thead><tbody>';
 
@@ -549,10 +558,10 @@ function getUsers() {
 
 		    print '
 			    <tr>
-					<td>'.$row["username"].'</td>
-				    <td>'.$row["email"].'</td>
-				    <td>'.$row["phone"].'</td>
-				    <td><a href="user-edit.php?id='.$row["id"].'" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> <a data-user-id="'.$row['id'].'" class="btn btn-danger btn-xs delete-user"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+					<td style="border: 1px solid purple;">'.$row["username"].'</td>
+				    <td style="border: 1px solid purple;">'.$row["email"].'</td>
+				    <td style="border: 1px solid purple;">'.$row["phone"].'</td>
+				    <td style="border: 1px solid purple;"><a href="user-edit.php?id='.$row["id"].'" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> <a data-user-id="'.$row['id'].'" class="btn btn-danger btn-xs delete-user"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
 			    </tr>
 		    ';
 		}
@@ -593,10 +602,10 @@ function getCustomers() {
 
 		print '<table class="table table-striped table-hover table-bordered" id="data-table"><thead><tr>
 
-				<th>Name</th>
-				<th>Email</th>
-				<th>Phone</th>
-				<th>Action</th>
+				<th style="border: 1px solid brown;">Name</th>
+				<th style="border: 1px solid brown;">Email</th>
+				<th style="border: 1px solid brown;">Phone</th>
+				<th style="border: 1px solid brown;">Action</th>
 
 			  </tr></thead><tbody>';
 
@@ -604,10 +613,10 @@ function getCustomers() {
 
 		    print '
 			    <tr>
-					<td>'.$row["name"].'</td>
-				    <td>'.$row["email"].'</td>
-				    <td>'.$row["phone"].'</td>
-				    <td><a href="customer-edit.php?id='.$row["id"].'" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> <a data-customer-id="'.$row['id'].'" class="btn btn-danger btn-xs delete-customer"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+					<td style="border: 1px solid purple;">'.$row["name"].'</td>
+				    <td style="border: 1px solid purple;">'.$row["email"].'</td>
+				    <td style="border: 1px solid purple;">'.$row["phone"].'</td>
+				    <td style="border: 1px solid purple;"><a href="customer-edit.php?id='.$row["id"].'" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> <a data-customer-id="'.$row['id'].'" class="btn btn-danger btn-xs delete-customer"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
 			    </tr>
 		    ';
 		}

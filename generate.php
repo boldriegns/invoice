@@ -42,7 +42,9 @@ if (!$result) {
     echo "Error: " . mysqli_error($mysqli);
 } else {
     if (mysqli_num_rows($result) > 0) {
-        echo "<h2 style='text-align: center; margin-top: 20px; margin-bottom: 20px;'>Invoice Report for $start to $end</h2>";
+                // Add the image tag for your logo
+                echo "<div style='text-align: center;'><img src='images/logo.png' alt='Logo'></div>";
+        echo "<h2 style='text-align: center; margin-top: 20px; margin-bottom: 20px;'>Report from $start to $end</h2>";
         echo "<table class='table table-bordered table-striped'>
         <thead>
             <tr>

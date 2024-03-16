@@ -484,66 +484,6 @@ if($action == 'update_customer') {
 	
 }
 
-// Update product
-if($action == 'update_product') {
-
-	// output any connection error
-	if ($mysqli->connect_error) {
-	    die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
-	}
-
-	session_start();
-    $product_vendor = $_SESSION['login_username'];
-
-	// invoice product information
-	$getID = $_POST['id']; // id
-	$product_name = $_POST['product_name']; // product name
-	$product_desc = $_POST['product_desc']; // product desc
-	$product_price = $_POST['product_price']; // product price
-
-	// the query
-	$query = "UPDATE products SET
-				product_name = ?,
-				product_desc = ?,
-				product_vendor = ?,
-				product_price = ?
-			 WHERE product_id = ?
-			";
-
-	/* Prepare statement */
-	$stmt = $mysqli->prepare($query);
-	if($stmt === false) {
-	  trigger_error('Wrong SQL: ' . $query . ' Error: ' . $mysqli->error, E_USER_ERROR);
-	}
-
-	/* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
-	$stmt->bind_param(
-		'sssss',
-		$product_name,$product_desc,$product_vendor,$product_price,$getID
-	);
-
-	//execute the query
-	if($stmt->execute()){
-	    //if saving success
-		echo json_encode(array(
-			'status' => 'Success',
-			'message'=> 'Product has been updated successfully!'
-		));
-
-	} else {
-	    //if unable to create new record
-	    echo json_encode(array(
-	    	'status' => 'Error',
-	    	//'message'=> 'There has been an error, please try again.'
-	    	'message' => 'There has been an error, please try again.<pre>'.$mysqli->error.'</pre><pre>'.$query.'</pre>'
-	    ));
-	}
-
-	//close database connection
-	$mysqli->close();
-	
-}
-
 
 // Adding new product
 if($action == 'update_invoice') {
@@ -870,208 +810,53 @@ if($action == 'delete_product') {
 
 }
 // Login to system
-if($action == 'login') {
+if ($action == 'login') {
 
-	// output any connection error
-	if ($mysqli->connect_error) {
-	    die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
-	}
+    // output any connection error
+    if ($mysqli->connect_error) {
+        die('Error : (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
+    }
 
-	session_start();
+    session_start();
 
     extract($_POST);
 
     $username = $_POST['username'];
-    $pass_encrypt = md5($_POST['password']);
+    $password = $_POST['password'];
 
-    $query = "SELECT * FROM `users` WHERE username='$username' AND `password` = '$pass_encrypt'";
+    // Retrieve hashed password from the database
+    $query = "SELECT * FROM `users` WHERE username='$username'";
+    $result = mysqli_query($mysqli, $query) or die(mysqli_error());
+    $count = mysqli_num_rows($result);
 
-    $results = mysqli_query($mysqli,$query) or die (mysqli_error());
-    $count = mysqli_num_rows($results);
+    if ($count == 1) { // Check if user exists
+        $row = $result->fetch_assoc();
+        $stored_password = $row['password'];
 
-    if($count != 0) { // Check if user exists
+        // Verify password
+        if (password_verify($password, $stored_password)) { // Verify hashed password
+            $user_role = $row['role']; // Fetch user role
 
-        $row = $results->fetch_assoc();
-        $user_role = $row['role']; // Fetch user role
+            $_SESSION['login_username'] = $row['username'];
+            $_SESSION['user_role'] = $user_role; // Store user role in session
 
-		$_SESSION['login_username'] = $row['username'];
-        $_SESSION['user_role'] = $user_role; // Store user role in session
-
-		echo json_encode(array(
-			'status' => 'Success',
-			'message'=> 'Login was a success! Transfering you to the system now, hold tight!',
-			'user_role' => $user_role // Send user role in response
-		));
-    } else {
-    	echo json_encode(array(
-	    	'status' => 'Error',
-	    	'message' => 'Login incorrect, does not exist or simply a problem! Try again!'
-	    ));
-    }
-}
-
-// Check if the action is to add a product
-if ($_POST['action'] == 'add_product') {
-    // Fetch product details from POST data
-    $product_name = $_POST['product_name'];
-    $product_desc = $_POST['product_desc'];
-    $product_price = $_POST['product_price'];
-    
-    // Fetch the user's role (assuming it's stored in the session)
-    session_start();
-    $product_vendor = $_SESSION['login_username']; // Adjust this according to how you store user role
-
-// Check if the product already exists
-$check_query = "SELECT COUNT(*) AS count FROM products WHERE product_name = ? AND product_vendor = ?";
-$check_stmt = $mysqli->prepare($check_query);
-$check_stmt->bind_param('ss', $product_name, $product_vendor);
-$check_stmt->execute();
-$check_result = $check_stmt->get_result();
-$row = $check_result->fetch_assoc();
-$product_count = $row['count'];
-
-
-    // If the product doesn't exist, insert it
-    if ($product_count == 0) {
-        $query = "INSERT INTO products
-                (
-                    product_name,
-                    product_desc,
-                    product_vendor,
-                    product_price
-                )
-                VALUES (
-                    ?, 
-                    ?,
-                    ?,
-                    ?
-                )";
-
-        header('Content-Type: application/json');
-
-        /* Prepare statement */
-        $stmt = $mysqli->prepare($query);
-        if ($stmt === false) {
-            trigger_error('Wrong SQL: ' . $query . ' Error: ' . $mysqli->error, E_USER_ERROR);
-        }
-
-        /* Bind parameters. Types: s = string, i = integer, d = double, b = blob */
-        $stmt->bind_param('sssd', $product_name, $product_desc, $product_vendor, $product_price);
-
-        if ($stmt->execute()) {
-            // If saving success
             echo json_encode(array(
                 'status' => 'Success',
-                'message' => 'Product has been added successfully!'
+                'message' => 'Login was a success! Transfering you to the system now, hold tight!',
+                'user_role' => $user_role // Send user role in response
             ));
         } else {
-            // If unable to create new record
             echo json_encode(array(
                 'status' => 'Error',
-                'message' => 'There has been an error, please try again.<pre>' . $mysqli->error . '</pre><pre>' . $query . '</pre>'
+                'message' => 'Incorrect password! Try again!'
             ));
         }
     } else {
-        // Product already exists
         echo json_encode(array(
             'status' => 'Error',
-            'message' => 'Product already exists.'
+            'message' => 'Username does not exist! Try again!'
         ));
     }
-
-    // Close database connection
-    $mysqli->close();
-}
-
-if ($action == 'make_order') {
-    // Connect to the database
-    $mysqli = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
-
-    // Check connection
-    if ($mysqli->connect_error) {
-        die("Connection failed: " . $mysqli->connect_error);
-    }
-
-    // Retrieve customer name from the form submission
-    $user_name = $_POST['customer_name'];
-	$quantity = $_POST['quantity'];
-
-    // Check if the user is an admin or a customer (You need to implement your own authentication mechanism)
-    $is_admin = false; // Example: You need to set this to true if the user is an admin
-
-    // Prepare statement for product retrieval
-    $sql_product = "SELECT product_name, product_price FROM products WHERE product_id = ?";
-    $stmt_product = $mysqli->prepare($sql_product);
-    $stmt_product->bind_param("s", $product_id);
-
-    // Retrieve selected products and quantities
-    if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
-        foreach ($_POST['quantity'] as $product_id => $quantity) {
-            // Validate quantity (you might want to add more validation)
-            $quantity = intval($quantity);
-            if ($quantity > 0) {
-       // Check if the order already exists for the same customer name, product name, quantity, and status
-         $sql_check_order = "SELECT * FROM orders WHERE customer_name = ? AND product_name = ? AND quantity = ? AND status = ?";
-         $stmt_check_order = $mysqli->prepare($sql_check_order);
-         $stmt_check_order->bind_param("ssis", $user_name, $product_name, $quantity, $status);
-         $status = "pending"; // Assuming status is always "pending" for new orders
-         $stmt_check_order->execute();
-         $result_check_order = $stmt_check_order->get_result();
-
-                if ($result_check_order->num_rows > 0) {
-                    // If the order already exists, return an error message
-                    echo json_encode(array(
-                        'status' => 'Error',
-                        'message' => 'Order already exists for the selected customer and quantity'
-                    ));
-                } else {
-                    // Execute product retrieval statement
-                    $stmt_product->execute();
-                    $result_product = $stmt_product->get_result();
-
-                    if ($result_product->num_rows > 0) {
-                        $product = $result_product->fetch_assoc();
-
-                        // Insert into order table
-                        $product_name = $product['product_name'];
-                        $product_price = $product['product_price'];
-                        $sql_insert = "INSERT INTO orders (product_id, customer_name, product_name, product_price, quantity) VALUES (?, ?, ?, ?, ?)";
-
-                        // Prepare statement for insertion
-                        $stmt_insert = $mysqli->prepare($sql_insert);
-                        $stmt_insert->bind_param("ssssi", $product_id, $user_name, $product_name, $product_price, $quantity);
-                        $result_insert = $stmt_insert->execute();
-
-                        if ($result_insert) {
-                            // If saving succeeded
-                            echo json_encode(array(
-                                'status' => 'Success',
-                                'message' => 'The order submitted successfully'
-                            ));
-                        } else {
-                            echo json_encode(array(
-                                'status' => 'Error',
-                                'message' => 'The order submission failed'
-                            ));
-                        }
-                    } else {
-                        // If unable to retrieve product details, log the error message
-                        echo json_encode(array(
-                            'status' => 'Error',
-                            'message' => 'Failed to retrieve product details'
-                        ));
-                    }
-                }
-            }
-        }
-    }
-
-    // Close prepared statements
-    $stmt_check_order->close();
-    $stmt_product->close();
-
-    // Close database connection
-    $mysqli->close();
 }
 
 
@@ -1129,7 +914,7 @@ if ($action == 'add_user') {
             trigger_error('Wrong SQL: ' . $query . ' Error: ' . $mysqli->error, E_USER_ERROR);
         }
 
-        $user_password = md5($user_password);
+		$user_password = password_hash($user_password, PASSWORD_DEFAULT); // Hash password
         /* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
         $stmt->bind_param('ssssssss', $user_username, $user_email, $user_phone,$user_customer_address_1,$user_customer_county, $user_customer_town, $role, $user_password);
 
@@ -1155,6 +940,93 @@ if ($action == 'add_user') {
     }
 
     //close database connection
+    $mysqli->close();
+}
+
+if ($action == 'make_order') {
+    // Connect to the database
+    $mysqli = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
+
+    // Check connection
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+
+    // Retrieve customer name from the form submission
+    $user_name = $_POST['customer_name'];
+
+    // Prepare statement for product retrieval
+    $sql_product = "SELECT product_name, product_price FROM products WHERE product_id = ?";
+    $stmt_product = $mysqli->prepare($sql_product);
+    $stmt_product->bind_param("s", $product_id);
+
+    // Retrieve selected products and quantities
+    if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
+        foreach ($_POST['quantity'] as $product_id => $quantity) {
+            // Validate quantity (you might want to add more validation)
+            $quantity = intval($quantity);
+            if ($quantity > 0) {
+                // Check if the order already exists for the same customer name, product name, quantity, and status
+                $status = "pending"; // Assuming status is always "pending" for new orders
+                $sql_check_order = "SELECT * FROM orders WHERE customer_name = ? AND product_id = ? AND quantity = ? AND status = ?";
+                $stmt_check_order = $mysqli->prepare($sql_check_order);
+                $stmt_check_order->bind_param("ssss", $user_name, $product_id, $quantity, $status);
+                $stmt_check_order->execute();
+                $result_check_order = $stmt_check_order->get_result();
+
+                if ($result_check_order->num_rows > 0) {
+                    // If the order already exists, return an error message
+                    echo json_encode(array(
+                        'status' => 'Error',
+                        'message' => 'Order already exists for the selected customer and quantity'
+                    ));
+                } else {
+                    // Execute product retrieval statement
+                    $stmt_product->execute();
+                    $result_product = $stmt_product->get_result();
+
+                    if ($result_product->num_rows > 0) {
+                        $product = $result_product->fetch_assoc();
+
+                        // Insert into order table
+                        $product_name = $product['product_name'];
+                        $product_price = $product['product_price'];
+                        $sql_insert = "INSERT INTO orders (product_id, customer_name, product_name, product_price, quantity) VALUES (?, ?, ?, ?, ?)";
+
+                        // Prepare statement for insertion
+                        $stmt_insert = $mysqli->prepare($sql_insert);
+                        $stmt_insert->bind_param("sssss", $product_id, $user_name, $product_name, $product_price, $quantity);
+                        $result_insert = $stmt_insert->execute();
+
+                        if ($result_insert) {
+                            // If saving succeeded
+                            echo json_encode(array(
+                                'status' => 'Success',
+                                'message' => 'The order submitted successfully'
+                            ));
+                        } else {
+                            echo json_encode(array(
+                                'status' => 'Error',
+                                'message' => 'The order submission failed'
+                            ));
+                        }
+                    } else {
+                        // If unable to retrieve product details, log the error message
+                        echo json_encode(array(
+                            'status' => 'Error',
+                            'message' => 'Failed to retrieve product details'
+                        ));
+                    }
+                }
+            }
+        }
+    }
+
+    // Close prepared statements
+    $stmt_check_order->close();
+    $stmt_product->close();
+
+    // Close database connection
     $mysqli->close();
 }
 
@@ -1217,7 +1089,7 @@ if($action == 'update_user') {
 			$username,$email,$phone,$customer_address_1,$customer_county, $customer_town,$role,$getID
 		);
 	} else {
-		$password = md5($password);
+		$password = password_hash($password, PASSWORD_DEFAULT); // Hash password
 		/* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
 		$stmt->bind_param(
 			'sssssssss',

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2024 at 01:42 AM
+-- Generation Time: Mar 16, 2024 at 08:23 PM
 -- Server version: 8.0.28
 -- PHP Version: 8.2.12
 
@@ -42,17 +42,6 @@ CREATE TABLE `customers` (
   `county_ship` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `customers`
---
-
-INSERT INTO `customers` (`id`, `invoice`, `name`, `email`, `address_1`, `town`, `county`, `phone`, `name_ship`, `address_1_ship`, `town_ship`, `county_ship`) VALUES
-(21, 2, 'okus', 'markow@gmail.com', '1143 Kuhl Avenue', 'Norcross', 'Nairobi', '0796569716', 'okus', '1143 Kuhl Avenue', 'Norcross', 'Nairobi'),
-(23, 4, 'were', 'brianriziki2021@gmail.com', 'hewe', 'mwiti', 'winty', '0796569716', 'were', 'hewe', 'mwiti', 'winty'),
-(24, 5, 'were', 'brianriziki2021@gmail.com', 'hewe', 'mwiti', 'winty', '0796569716', 'were', 'hewe', 'mwiti', 'winty'),
-(25, 1, 'okus', 'markow@gmail.com', '1143 Kuhl Avenue', 'Norcross', 'Nairobi', '0796569716', 'okus', '1143 Kuhl Avenue', 'Norcross', 'Nairobi'),
-(26, 3, 'okus', 'markow@gmail.com', '1143 Kuhl Avenue', 'Norcross', 'Nairobi', '0796569716', 'okus', '1143 Kuhl Avenue', 'Norcross', 'Nairobi');
-
 -- --------------------------------------------------------
 
 --
@@ -73,17 +62,6 @@ CREATE TABLE `invoices` (
   `status` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `invoices`
---
-
-INSERT INTO `invoices` (`invoice`, `orders_id`, `product_vendor`, `invoice_date`, `invoice_due_date`, `subtotal`, `shipping`, `vat`, `total`, `invoice_type`, `status`) VALUES
-(1, 20, 'Mark Owino', '2024-03-09', '2024-03-15', 6997, 0, 700, 7697, 'invoice', 'paid'),
-(2, 21, 'Mark Owino', '2024-03-09', '2024-03-22', 5945, 0, 0, 5945, 'invoice', 'open'),
-(3, 22, 'okumu', '2024-03-09', '2024-03-16', 2745, 0, 275, 3020, 'invoice', 'paid'),
-(4, 19, 'okumu', '2024-03-09', '2024-03-16', 5245, 0, 525, 5770, 'invoice', 'open'),
-(5, 18, 'okumu', '2024-03-09', '2024-03-22', 2749, 0, 275, 3024, 'invoice', 'open');
-
 -- --------------------------------------------------------
 
 --
@@ -99,17 +77,6 @@ CREATE TABLE `invoice_items` (
   `discount` decimal(10,0) NOT NULL,
   `subtotal` decimal(10,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `invoice_items`
---
-
-INSERT INTO `invoice_items` (`id`, `invoice`, `product`, `qty`, `price`, `discount`, `subtotal`) VALUES
-(21, 2, 'second product', 7, 850, 5, 5945),
-(23, 4, '4 product', 5, 1050, 5, 5245),
-(24, 5, '3 product', 5, 550, 1, 2749),
-(25, 1, '5 product', 4, 1750, 3, 6997),
-(26, 3, '3 product', 5, 550, 5, 2745);
 
 -- --------------------------------------------------------
 
@@ -127,17 +94,6 @@ CREATE TABLE `orders` (
   `quantity` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `product_id`, `customer_name`, `status`, `product_name`, `product_price`, `quantity`) VALUES
-(18, 9, 'were', 'processed', '3 product', 550, 5),
-(19, 10, 'were', 'processed', '4 product', 1050, 5),
-(20, 11, 'okus', 'processed', '5 product', 1750, 4),
-(21, 7, 'okus', 'processed', 'second product', 850, 7),
-(22, 9, 'okus', 'processed', '3 product', 550, 5);
-
 -- --------------------------------------------------------
 
 --
@@ -147,6 +103,7 @@ INSERT INTO `orders` (`id`, `product_id`, `customer_name`, `status`, `product_na
 CREATE TABLE `products` (
   `product_id` int NOT NULL,
   `product_name` varchar(255) NOT NULL,
+  `photo` varchar(255) NOT NULL,
   `product_desc` varchar(255) NOT NULL,
   `product_vendor` varchar(255) NOT NULL,
   `product_price` decimal(10,0) NOT NULL
@@ -156,12 +113,13 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`product_id`, `product_name`, `product_desc`, `product_vendor`, `product_price`) VALUES
-(6, 'first product', 'high quality', 'okumu', 900),
-(7, 'second product', 'high quality', 'Mark Owino', 850),
-(9, '3 product', 'high quality', 'okumu', 550),
-(10, '4 product', 'high quality', 'okumu', 1050),
-(11, '5 product', 'high quality', 'Mark Owino', 1750);
+INSERT INTO `products` (`product_id`, `product_name`, `photo`, `product_desc`, `product_vendor`, `product_price`) VALUES
+(1, 'iPhone 14 Pro Max', 'images/iphone.jpeg', 'improved battery life, support 5G connectivity ', 'okumu', 120500),
+(2, 'HP Spectre x360 14', 'images/lap.jpeg', '14-inch diagonal 4K OLED touchscreen display,12th Gen Intel Core i7,16GB ram,SSD with capacities of 1TB', 'okumu', 140000),
+(3, 'Prada Crocodile Leather Sneakers', 'images/shoe.jpeg', 'Rubber for the outsole,cushioned insoles, padded collars, and breathable linings.', 'reigns', 10000),
+(4, 'LG OLED C1 Series', 'images/telv.jpeg', '4K Ultra HD resolution (3840 x 2160 pixels),LG\'s OLED technology,HDR (High Dynamic Range).', 'reigns', 145000),
+(5, 'iPhone 14 Pro Max', 'images/iphone-x-gold-black.jpg', 'ProMotion OLED display,latest A-series chip for enhanced performance,latest version of iOS, offering new features, security enhancements, and optimizations.', 'Mark Owino', 135000),
+(6, 'HP Spectre x360 15', 'images/laps.jpeg', 'impressive battery life,come with support for active stylus pens, 360-degree hinge', 'Mark Owino', 146000);
 
 -- --------------------------------------------------------
 
@@ -188,8 +146,8 @@ CREATE TABLE `store_customers` (
 --
 
 INSERT INTO `store_customers` (`id`, `name`, `email`, `address_1`, `town`, `county`, `phone`, `name_ship`, `address_1_ship`, `town_ship`, `county_ship`) VALUES
-(1, 'Enock', 'enockmarkjunior@gmail.com', '0741094403', 'Nairobi', 'Kenya', '+254741094403', 'Enock', '0741094403', 'Nairobi', 'Kenya'),
-(2, 'brian john', 'brianriziki2020@gmail.com', '0741094403', 'Nairobi', 'Kenya', '+254741094403', 'brian john', '0741094403', 'Nairobi', 'Kenya');
+(1, 'brian john', 'brianriziki2020@gmail.com', '0741094403', 'Nairobi', 'Kenya', '+254741094403', 'brian john', '0741094403', 'Nairobi', 'Kenya'),
+(2, 'Reigns', 'brianriziki2026@gmail.com', '0741094403', 'Nairobi', 'Kenya', '+254741094403', 'Reigns', '0741094403', 'Nairobi', 'Kenya');
 
 -- --------------------------------------------------------
 
@@ -214,11 +172,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `phone`, `address_1`, `county`, `town`, `role`, `password`) VALUES
-(1, 'Mark Owino', 'mark@gmail.com', '0796569716', 'mwea', 'vihiga', 'norcos', 'vendor', '81dc9bdb52d04dc20036dbd8313ed055'),
-(2, 'boldreigns', 'brianriziki2020@gmail.com', '+254741094403', 'luanda', 'kisumu', 'maseno', 'admin', '81dc9bdb52d04dc20036dbd8313ed055'),
-(6, 'were', 'brianriziki2021@gmail.com', '0796569716', 'hewe', 'winty', 'mwiti', 'customer', '81dc9bdb52d04dc20036dbd8313ed055'),
-(8, 'okus', 'markow@gmail.com', '0796569716', '1143 Kuhl Avenue', 'Nairobi', 'Norcross', 'customer', '81dc9bdb52d04dc20036dbd8313ed055'),
-(9, 'okumu', 'ookumu@gmail.com', '0796544676', 'mawe', 'nairobi', 'venus', 'vendor', '81dc9bdb52d04dc20036dbd8313ed055');
+(1, 'boldreigns', 'brianriziki2020@gmail.com', '+254741094403', '0741094403', 'kisumu', 'maseno', 'admin', '$2y$10$voM1iRFxykhsystsE9JxO.VtpcHQVF.qorLU7x2bcxD4pZTPdN4HO'),
+(2, 'okumu', 'okumu3030@gmail.com', '+254741094403', '0741094403', 'Nairobi', 'Nairobi', 'vendor', '$2y$10$AnTvUm0Rtfe//xWgGk7.I.l5QBKZZH3HdDoBuN78xpep/zav5zFge'),
+(3, 'enock', 'brianriziki2021@gmail.com', '+254741094403', '0741094403', 'Nairobi', 'Nairobi', 'customer', '$2y$10$J/TyIYnoWg8ddpLqU3GJ6uekpwjZTz2q4HkeJj5bHYvaLXUAmiBGS'),
+(4, 'were', 'mark@gmail.com', '0796569716', '1143 Kuhl Avenue', 'Nairobi', 'Nairobi', 'customer', '$2y$10$u6smQuX8gQm7yPmVE7Gu8.S34nM4QkPjEE4nRpO9cfaromk3NWw7.'),
+(5, 'reigns', 'enockmarkjunior@gmail.com', '+254741094403', 'maseno', 'Nairobi', 'Nairobi', 'vendor', '$2y$10$Gt0nceaSo4k4EnGrJvhpEON49ha6sdMHYyZ9A7nV9W4DN9WlRispW'),
+(6, 'Mark Owino', 'markowino418@gmail.com', '+25474109440', 'kisumu west', 'kisumu', 'maseno', 'vendor', '$2y$10$Z1PUw4JBvC5wQlRvD80EzuTAPQlxwM9V4Gbwj8gf4p5EIZE3KTgoS');
 
 --
 -- Indexes for dumped tables
@@ -278,43 +237,43 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `invoice` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `invoice` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `product_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `store_customers`
 --
 ALTER TABLE `store_customers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

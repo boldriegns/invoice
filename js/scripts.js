@@ -10,11 +10,6 @@ $(document).ready(function() {
 	// Load dataTables
 	$("#data-table").dataTable();
 
-	// add product
-	$("#action_add_product").click(function(e) {
-		e.preventDefault();
-	    actionAddProduct();
-	});
 	// make order
 	$("#action_make_order").click(function(e) {
 		e.preventDefault();
@@ -76,12 +71,6 @@ $(document).ready(function() {
 		updateCustomer();
 	});
 
-	// update product
-	$(document).on('click', "#action_update_product", function(e) {
-		e.preventDefault();
-		updateProduct();
-	});
-
 	// login form
 	$(document).bind('keypress', function(e) {
 		e.preventDefault;
@@ -95,7 +84,6 @@ $(document).ready(function() {
 		e.preventDefault;
 		actionLogin();
 	});
-
 
 	// email invoice
 	$(document).on('click', ".email-invoice", function(e) {
@@ -378,46 +366,6 @@ $(document).ready(function() {
 
 	}
 
-	function actionAddProduct() {
-
-		var errorCounter = validateForm();
-
-		if (errorCounter > 0) {
-		    $("#response").removeClass("alert-success").addClass("alert-warning").fadeIn();
-		    $("#response .message").html("<strong>Error</strong>: It appear's you have forgotten to complete something!");
-		    $("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-		} else {
-
-			$(".required").parent().removeClass("has-error");
-
-			var $btn = $("#action_add_product").button("loading");
-
-			$.ajax({
-
-				url: 'response.php',
-				type: 'POST',
-				data: $("#add_product").serialize(),
-				dataType: 'json',
-				success: function(data){
-					$("#response .message").html("<strong>" + data.status + "</strong>: " + data.message);
-					$("#response").removeClass("alert-warning").addClass("alert-success").fadeIn();
-					$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-					$btn.button("reset");
-					window.location = "product-list.php";
-				},
-				error: function(xhr, status, error) {
-					var errorMessage = "Could not add the product";
-					$("#response .message").html("<strong>Error</strong>: " + errorMessage);
-					$("#response").removeClass("alert-success").addClass("alert-warning").fadeIn();
-					$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-					$btn.button("reset");
-				}
-
-			});
-		}
-
-	}
-
 	function actionMakeOrder() {
 
 		var errorCounter = validateForm();
@@ -671,34 +619,6 @@ $(document).ready(function() {
 
    	}
 
-   	function updateProduct() {
-
-   		var $btn = $("#action_update_product").button("loading");
-
-        jQuery.ajax({
-
-        	url: 'response.php',
-            type: 'POST', 
-            data: $("#update_product").serialize(),
-            dataType: 'json', 
-            success: function(data){
-				$("#response .message").html("<strong>" + data.status + "</strong>: " + data.message);
-				$("#response").removeClass("alert-warning").addClass("alert-success").fadeIn();
-				$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-				$btn.button("reset");
-				window.location = "product-list.php";
-			},
-			error: function(xhr, status, error) {
-				var errorMessage = "Could not update product details";
-				$("#response .message").html("<strong>Error</strong>: " + errorMessage);
-				$("#response").removeClass("alert-success").addClass("alert-warning").fadeIn();
-				$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-				$btn.button("reset");
-			}
-    	});
-
-   	}
-
    	function updateUser() {
 
    		var $btn = $("#action_update_user").button("loading");
@@ -785,6 +705,8 @@ $(document).ready(function() {
     	});
 
    	}
+
+
 
    	// login function
 	function actionLogin() {

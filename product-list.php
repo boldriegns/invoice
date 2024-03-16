@@ -3,6 +3,14 @@
 include('header.php');
 include('functions.php');
 
+if (isset($_SESSION['success'])) {
+    echo "<p>" . $_SESSION['success'] . "</p>";
+    unset($_SESSION['success']); // Remove the success message after displaying it
+} elseif (isset($_SESSION['error'])) {
+    echo "<p>" . $_SESSION['error'] . "</p>";
+    unset($_SESSION['error']); // Remove the error message after displaying it
+}
+
 ?>
 
 <h1>Product List</h1>
@@ -11,11 +19,6 @@ include('functions.php');
 <div class="row">
 	
 	<div class="col-xs-12">
-
-		<div id="response" class="alert alert-success" style="display:none;">
-			<a href="#" class="close" data-dismiss="alert">&times;</a>
-			<div class="message"></div>
-		</div>
 	
 		<div class="panel panel-default">
 			<div class="panel-heading">
